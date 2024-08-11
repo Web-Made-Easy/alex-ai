@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit import experimental_rerun
 import google.generativeai as genai
 import time
 import os
@@ -46,7 +45,7 @@ if not st.session_state.pin_entered:
     pin_input = st.text_input("Enter your Tutor Pin:")
     if pin_input: 
         st.session_state.pin_entered = True 
-        experimental_rerun()
+        st.rerun()
 
 if st.session_state.pin_entered: 
     for message in st.session_state.messages:
