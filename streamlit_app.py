@@ -34,7 +34,7 @@ if not st.session_state.pin_entered:
         st.session_state.pin_entered = True 
         st.experimental_rerun() 
 
-f st.session_state.pin_entered: 
+if st.session_state.pin_entered: 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
