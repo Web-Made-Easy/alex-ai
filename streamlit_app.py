@@ -39,8 +39,10 @@ if st.session_state.pin_entered:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("You:"):
+    if prompt := st.chat_input("You:  "):
         st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
         with st.chat_message("tutor"):
             response_placeholder = st.empty()
