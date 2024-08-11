@@ -2,6 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import time
 import os
+import random
 
 st.title("Alex AI")
 st.write("Your AI Tutor. Powered by Google Generative AI.")
@@ -22,6 +23,18 @@ model = genai.GenerativeModel(
 )
 
 chat_session = model.start_chat(history=[])
+
+signup_btn = st.button("Sign Up")
+if signup_btn:
+    signup_popover = st.popover("Sign Up", help=None, disabled=False, use_container_width=True)
+    with signup_form("Sign Up", border=False): 
+        name_input = st.text_input("Enter your name: ")
+        email_input = st.text_input("Enter your email: ")
+        password_input = st.text_input("Enter a password: ", type="password")
+        submit_btn = st.form_submit_button("Sign Up")
+    if submit_btn:
+        pass
+        
 
 if "pin_entered" not in st.session_state:
     st.session_state.pin_entered = False
