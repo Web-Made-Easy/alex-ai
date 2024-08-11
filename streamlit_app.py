@@ -18,7 +18,7 @@ generation_config = {
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
-    system_instruction="Your name is Alex. You are a friendly AI Tutor.",
+    system_instruction="Your name is Alex. You are a friendly AI Tutor. You are a year 7 teacher and only answer questions related to year 7 level.",
 )
 
 chat_session = model.start_chat(history=[])
@@ -32,7 +32,7 @@ if not st.session_state.pin_entered:
     pin_input = st.text_input("Enter your Tutor Pin:")
     if pin_input: 
         st.session_state.pin_entered = True 
-        st.experimental_rerun() 
+        st.experimental_rerun()
 
 if st.session_state.pin_entered: 
     for message in st.session_state.messages:
