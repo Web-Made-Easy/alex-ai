@@ -56,8 +56,8 @@ if st.session_state.pin_entered:
 
                 # Simulate word-by-word output
                 for letter in full_response:
-                    response_placeholder.markdown(response_placeholder.value)
-                    response_placeholder.markdown(letter)
+                    response_placeholder = response_placeholder.value
+                    response_placeholder.markdown(response_placeholder + letter)
                     time.sleep(0.05)
 
             except Exception as e:
