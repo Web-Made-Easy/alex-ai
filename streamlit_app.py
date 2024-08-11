@@ -45,7 +45,7 @@ if not st.session_state.pin_entered:
     pin_input = st.text_input("Enter your Tutor Pin:")
     if pin_input: 
         st.session_state.pin_entered = True 
-        st.experimental_rerun()
+        experimental_rerun()
 
 if st.session_state.pin_entered: 
     for message in st.session_state.messages:
