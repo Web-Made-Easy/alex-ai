@@ -38,7 +38,7 @@ def get_response(input):
 
 placeholder = st.empty()
 pin = placeholder.text_input("", key="pin")
-if pin == 12345678:
+if pin:
     placeholder.empty()
     
     if "messages" not in st.session_state:
