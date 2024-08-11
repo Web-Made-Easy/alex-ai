@@ -18,7 +18,7 @@ generation_config = {
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
-    system_instruction="Your name is Alex. You are a friendly AI Tutor. You are a year 7 teacher and only answer questions related to year 7 level.",
+    system_instruction="Your name is Alex. You are a friendly AI Tutor. You are a year 7 teacher and only answer questions related to year 7 level and about learning.",
 )
 
 chat_session = model.start_chat(history=[])
