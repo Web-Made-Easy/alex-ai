@@ -34,7 +34,7 @@ if not st.session_state.pin_entered:
         st.session_state.pin_entered = True 
         st.experimental_rerun() 
 
-if st.session_state.pin_entered: 
+f st.session_state.pin_entered: 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -47,10 +47,11 @@ if st.session_state.pin_entered:
             full_response = ""
             try:
                 response = chat_session.send_message(prompt)
-                for word in response.split():
-                    full_response += word + " "
+                # Access the text content correctly:
+                for candidate in response.candidates: 
+                    full_response += candidate.content + " "
                     response_placeholder.markdown(full_response)
-                    time.sleep(0.05) 
+                    time.sleep(0.05)
             except Exception as e:
                 response_placeholder.markdown("An error occurred: " + str(e))
 
