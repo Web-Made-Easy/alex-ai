@@ -52,7 +52,6 @@ if pin:
             st.markdown(message["content"])
         
     if prompt := st.chat_input("Say something"):
-        st.write(f"You: {prompt}")
         with st.chat_message("user"):
             st.markdown(prompt)
         st.session_state.messages.append({"role": "user", "content": prompt})
