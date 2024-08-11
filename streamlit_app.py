@@ -1,4 +1,5 @@
-import streamlit as st, experimental_rerun
+import streamlit as st
+from streamlit import experimental_rerun
 import google.generativeai as genai
 import time
 import os
