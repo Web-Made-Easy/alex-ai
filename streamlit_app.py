@@ -43,9 +43,11 @@ if "messages" not in st.session_state:
 
 if not st.session_state.pin_entered:
     pin_input = st.text_input("Enter your Tutor Pin:")
-    if pin_input: 
+    if pin_input=="497846": 
         st.session_state.pin_entered = True 
         st.rerun()
+    else:
+        st.error("Invalid Pin")
 
 if st.session_state.pin_entered: 
     for message in st.session_state.messages:
