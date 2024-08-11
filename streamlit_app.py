@@ -58,7 +58,7 @@ if st.session_state.pin_entered:
                 for letter in full_response:
                     current_text += letter
                     response_placeholder.markdown(current_text)
-                    time.sleep(0.05)
+                    time.sleep(0.005)
 
             except Exception as e:
                 response_placeholder.markdown("An error occurred: " + str(e))
