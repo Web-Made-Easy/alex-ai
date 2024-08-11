@@ -3,15 +3,10 @@ import google.generativeai as genai
 import time
 import os
 
-# Show title and description.
 st.title("Alex AI")
-st.write(
-    "This is an AI Tutor to help you with your learning, no matter your age. "
-    "It is powered by Google Generative AI and Streamlit. "
-)
+st.write("Your AI Tutor. Powered by Google Generative AI.")
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
-# Create the model
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -26,41 +21,37 @@ model = genai.GenerativeModel(
     system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
-chat_session = model.start_chat(
-  history=[
-  ]
-)
+chat_session = model.start_chat(history=[])
 
-def get_response(input):
-    response = chat_session.send_message(input)
-    for word in response.split():
-        yield word + ""
-        time.sleep(0.05)
+if "pin_entered" not in st.session_state:
+    st.session_state.pin_entered = False
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-placeholder = st.empty()
-pin = placeholder.text_input("")
-if pin:
-    if "pin" not in st.session_state:
-        st.session_state.pin = pin
-    placeholder.empty()
-    
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-        
+if not st.session_state.pin_entered:
+    pin_input = st.text_input("Enter your Tutor Pin:")
+    if pin_input: 
+        st.session_state.pin_entered = True 
+        st.experimental_rerun() 
+
+if st.session_state.pin_entered: 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-        
-    if prompt := st.chat_input("Say something"):
-        with st.chat_message("user"):
-            st.markdown(prompt)
+
+    if prompt := st.chat_input("You:"):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        
-        response = get_response(prompt)
+
         with st.chat_message("tutor"):
-            st.markdown(response)
-        st.session_state.message.append({"role": "tutor", "content": response})
-    
-else:
-    st.info("Enter your Tutor Pin to access your account.")
-        
+            response_placeholder = st.empty()
+            full_response = ""
+            try:
+                response = chat_session.send_message(prompt)
+                for word in response.split():
+                    full_response += word + " "
+                    response_placeholder.markdown(full_response)
+                    time.sleep(0.05) 
+            except Exception as e:
+                response_placeholder.markdown("An error occurred: " + str(e))
+
+        st.session_state.messages.append({"role": "tutor", "content": full_response})
