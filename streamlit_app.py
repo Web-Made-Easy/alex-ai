@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+import time
 
 # Show title and description.
 st.title("Alex AI")
@@ -29,12 +30,16 @@ chat_session = model.start_chat(
   ]
 )
 
+def get_response(input):
+    response = chat_session.send_message(input)
+    for word in response.split():
+        yield word + ""
+        time.sleep(0.05)
 
 placeholder = st.empty()
 pin = placeholder.text_input("", key="pin")
-if pin:
+if pin == 12345678:
     placeholder.empty()
-    prompt = st.chat_input("Say something")
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -43,13 +48,13 @@ if pin:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
         
-    if prompt := st.chat_input("What's up?"):
+    if prompt := st.chat_input("Say something"):
         st.write(f"You: {prompt}")
         with st.chat_message("user"):
             st.markdown(prompt)
         st.session_state.messages.append({"role": "user", "content": prompt})
         
-        response = chat_session.send_message(prompt)
+        response = get_response(prompt)
         with st.chat_message("tutor"):
             st.markdown(response)
         st.session_state.message.append({"role": "tutor", "content": response})
