@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import time
+import os
 
 # Show title and description.
 st.title("Alex AI")
@@ -8,7 +9,7 @@ st.write(
     "This is an AI Tutor to help you with your learning, no matter your age. "
     "It is powered by Google Generative AI and Streamlit. "
 )
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 # Create the model
 generation_config = {
