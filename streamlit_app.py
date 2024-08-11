@@ -38,8 +38,10 @@ def get_response(input):
         time.sleep(0.05)
 
 placeholder = st.empty()
-pin = placeholder.text_input("", key="pin")
+pin = placeholder.text_input("")
 if pin:
+    if "pin" not in st.session_state:
+        st.session_state.pin = pin
     placeholder.empty()
     
     if "messages" not in st.session_state:
