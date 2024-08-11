@@ -4,7 +4,7 @@ import time
 import os
 import random
 
-st.title("Abhinav AI")
+st.title("Alex AI")
 st.write("Your AI Tutor. Powered by Google Generative AI.")
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
