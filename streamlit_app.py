@@ -45,13 +45,19 @@ if st.session_state.pin_entered:
         with st.chat_message("tutor"):
             response_placeholder = st.empty()
             full_response = ""
+
             try:
                 response = chat_session.send_message(prompt)
-                # Correctly convert to string:
-                for candidate in response.candidates: 
-                    full_response += str(candidate.content) + " "
-                    response_placeholder.markdown(full_response)
+
+                # Get the full text response directly
+                full_response = response.text  
+
+                # Simulate word-by-word output
+                for word in full_response.split():
+                    response_placeholder.markdown(full_response) 
                     time.sleep(0.05)
+
             except Exception as e:
                 response_placeholder.markdown("An error occurred: " + str(e))
+
         st.session_state.messages.append({"role": "tutor", "content": full_response})
