@@ -55,9 +55,9 @@ if st.session_state.pin_entered:
                 full_response = response.text  
 
                 # Simulate word-by-word output
-                for word in full_response.split():
-                    response_placeholder.markdown(full_response) 
-                    time.sleep(0.1)
+                for letter in full_response:
+                    response_placeholder.markdown(response_placeholder.value + letter) 
+                    time.sleep(0.05)
 
             except Exception as e:
                 response_placeholder.markdown("An error occurred: " + str(e))
