@@ -41,8 +41,9 @@ with c5:
             created_pin = random.randint(111111,999999)
             # Database:
             try:
-                existing_user = supabase.'account_data'.find_one({'email': email_input})
-                if existing_user:
+                email_found = f"""SELECT email FROM account_data WHERE email={email_input}"""
+                supabase.from_'account_data'.execute(email_found)
+                if email_found:
                     st.error("An account with this email already exists! Try again.")
                 else:
                     query = f"""INSERT INTO 'account_data' (name, email, password, pin) VALUES ('{name_input}', '{email_input}', '{password_input}', {created_pin});"""
