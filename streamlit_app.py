@@ -24,14 +24,17 @@ model = genai.GenerativeModel(
 
 chat_session = model.start_chat(history=[])
 
-with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
-    with st.form("Sign Up", border=False):
-        name_input = signup_popover.text_input("Enter your name: ")
-        email_input = signup_popover.text_input("Enter your email: ")
-        password_input = signup_popover.text_input("Enter a password: ", type="password")
-        submit_btn = signup_popover.form_submit_button("Sign Up")
-    if submit_btn:
-        pass
+c1, c2, c3, c4, c5 = st.columns([1,2,3,4,5])
+
+with c5:
+    with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
+        with st.form("Sign Up", border=False):
+            name_input = st.text_input("Enter your name: ")
+            email_input = st.text_input("Enter your email: ")
+            password_input = st.text_input("Enter a password: ", type="password")
+            submit_btn = st.form_submit_button("Sign Up")
+        if submit_btn:
+            pass
         
 
 if "pin_entered" not in st.session_state:
