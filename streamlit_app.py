@@ -27,7 +27,8 @@ chat_session = model.start_chat(history=[])
 signup_btn = st.button("Sign Up")
 if signup_btn:
     signup_popover = st.popover("Sign Up", help=None, disabled=False, use_container_width=True)
-    with st.form("Sign Up", border=False): 
+    form = signup_popover.form("Sign Up", border=False)
+    with form: 
         name_input = signup_popover.text_input("Enter your name: ")
         email_input = signup_popover.text_input("Enter your email: ")
         password_input = signup_popover.text_input("Enter a password: ", type="password")
