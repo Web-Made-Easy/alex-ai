@@ -3,7 +3,7 @@ import google.generativeai as genai
 import time
 import os
 import random
-from st_supabase_connection import SupabaseConnection
+import supabase
 
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
@@ -18,7 +18,7 @@ generation_config = {
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
-    system_instruction="Your name is Alex. You are a friendly AI Tutor. You are a year 7 teacher and only answer questions related to year 7 level about learning.",
+    system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
 chat_session = model.start_chat(history=[])
