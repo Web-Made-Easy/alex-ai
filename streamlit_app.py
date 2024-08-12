@@ -22,7 +22,7 @@ model = genai.GenerativeModel(
 
 chat_session = model.start_chat(history=[])
 
-c1, c2, c3, c4, c5 = st.columns(spec=[0.8, 0.2, 0.2, 0.2, 0.2, 0.2][1,2,3,4,5])
+c1, c2, c3, c4, c5 = st.columns([5,1,1,1,3])
 
 with c5:
     with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
