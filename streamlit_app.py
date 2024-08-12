@@ -5,7 +5,8 @@ import os
 import random
 from supabase import create_client, Client
 
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
+# Configure the Google Generative AI model
+genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
 generation_config = {
     "temperature": 1,
@@ -21,9 +22,10 @@ model = genai.GenerativeModel(
     system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
-supabase_url = os.environ("SUPABASE_URL")
-supabase_key = os.environ("SUPABASE_KEY")
-supabase = Client = create_client(supabase_url, supabase_key)
+# Initialize Supabase client
+supabase_url = os.environ.get("SUPABASE_URL")
+supabase_key = os.environ.get("SUPABASE_KEY")
+supabase = create_client(supabase_url, supabase_key)
 
 chat_session = model.start_chat(history=[])
 
@@ -38,20 +40,27 @@ with c5:
             submit_btn = st.form_submit_button("Sign Up")
         if submit_btn:
             # Pin:
-            created_pin = random.randint(111111,999999)
+            created_pin = random.randint(111111, 999999)
             # Database:
             try:
-                email_found = f"""SELECT email FROM account_data WHERE email={email_input}"""
-                supabase.from_'account_data'.execute(email_found)
-                if email_found:
+                # Check if email already exists
+                email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                if email_found.data:
                     st.error("An account with this email already exists! Try again.")
                 else:
-                    query = f"""INSERT INTO 'account_data' (name, email, password, pin) VALUES ('{name_input}', '{email_input}', '{password_input}', {created_pin});"""
-                    supabase.from_'account_data'.execute(query)
-                    st.success("Account created succesfully!")
+                    # Insert new account data
+                    query = {
+                        "name": name_input,
+                        "email": email_input,
+                        "password": password_input,
+                        "pin": created_pin
+                    }
+                    supabase.from_('account_data').insert(query).execute()
+                    st.success("Account created successfully!")
                     st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
             except Exception as e:
                 st.error(f"Something went wrong: {e}")
+
 with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Google Generative AI.")
@@ -64,7 +73,7 @@ if "messages" not in st.session_state:
 if not st.session_state.pin_entered:
     pin_input = st.text_input("Enter your Pin:")
     if pin_input:
-        if pin_input=="459836": 
+        if pin_input == "459836": 
             st.session_state.pin_entered = True
             st.rerun()
         else:
