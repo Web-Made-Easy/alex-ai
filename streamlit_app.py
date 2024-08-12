@@ -25,7 +25,7 @@ model = genai.GenerativeModel(
 chat_session = model.start_chat(history=[])
 
 signup_popover = st.popover("Sign Up", help=None, disabled=False, use_container_width=True)
-form = signup_popover.form("Sign Up", border=False)
+form = st.form("Sign Up", border=False)
 with form: 
     name_input = signup_popover.text_input("Enter your name: ")
     email_input = signup_popover.text_input("Enter your email: ")
