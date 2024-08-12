@@ -3,7 +3,7 @@ import google.generativeai as genai
 import time
 import os
 import random
-import supabase
+from supabase import create_client, Client
 
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
@@ -21,6 +21,10 @@ model = genai.GenerativeModel(
     system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
+supabase_url = os.environ("SUPABASE_URL")
+supabase_key = os.environ("SUPABASE_KEY")
+supabase = Client = create_client(supabase_url, supabase_key)
+
 chat_session = model.start_chat(history=[])
 
 c1, c2, c3, c4, c5 = st.columns([6,1,1,1,3])
@@ -33,9 +37,20 @@ with c5:
             password_input = st.text_input("Enter a password: ", type="password")
             submit_btn = st.form_submit_button("Sign Up")
         if submit_btn:
-            # Initialize database connection.
-            conn = st.connection("supabase",type=SupabaseConnection)
-            conn.query("INSERT INTO ", table="account_data", ttl="10m").execute()
+            # Pin:
+            created_pin = random.randint(111111,999999)
+            # Database:
+            try:
+                existing_user = supabase.'account_data'.find_one({'email': email_input})
+                if existing_user:
+                    st.error("An account with this email already exists! Try again.")
+                else:
+                    query = f"""INSERT INTO 'account_data' (name, email, password, pin) VALUES ('{name_input}', '{email_input}', '{password_input}', {created_pin});"""
+                    supabase.from_'account_data'.execute(query)
+                    st.success("Account created succesfully!")
+                    st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
+            except Exception as e:
+                st.error(f"Something went wrong: {e}")
 with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Google Generative AI.")
@@ -46,15 +61,15 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if not st.session_state.pin_entered:
-    pin_input = st.text_input("Enter your Tutor Pin:")
+    pin_input = st.text_input("Enter your Pin:")
     if pin_input:
         if pin_input=="459836": 
             st.session_state.pin_entered = True
             st.rerun()
         else:
-            st.error("Invalid Pin")
+            st.error("Invalid pin...")
     else:
-        st.info("Enter your Tutor Pin to access the site")
+        st.info("Enter your Tutor Pin to access your account")
 
 if st.session_state.pin_entered: 
     for message in st.session_state.messages:
