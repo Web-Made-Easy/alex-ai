@@ -4,7 +4,6 @@ import time
 import os
 import random
 
-st.title("Alex AI")
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 generation_config = {
@@ -35,6 +34,7 @@ with c5:
         if submit_btn:
             pass
             
+st.title("Alex AI")
 st.write("Your AI Tutor. Powered by Google Generative AI.")
 
 if "pin_entered" not in st.session_state:
