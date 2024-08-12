@@ -22,7 +22,7 @@ model = genai.GenerativeModel(
 
 chat_session = model.start_chat(history=[])
 
-c1, c2, c3, c4, c5 = st.columns(spec=0.3, [1,2,3,4,5])
+c1, c2, c3, c4, c5 = st.columns([1,2,3,4,5])
 
 with c5:
     with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
@@ -33,9 +33,9 @@ with c5:
             submit_btn = st.form_submit_button("Sign Up")
         if submit_btn:
             pass
-            
-st.title("Alex AI")
-st.write("Your AI Tutor. Powered by Google Generative AI.")
+with c1:
+    st.title("Alex AI")
+    st.write("Your AI Tutor. Powered by Google Generative AI.")
 
 if "pin_entered" not in st.session_state:
     st.session_state.pin_entered = False
