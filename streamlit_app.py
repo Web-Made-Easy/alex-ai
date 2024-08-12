@@ -3,6 +3,7 @@ import google.generativeai as genai
 import time
 import os
 import random
+from st_supabase_connection import SupabaseConnection
 
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
@@ -17,7 +18,7 @@ generation_config = {
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
-    system_instruction="Your name is Alex. You are a friendly AI Tutor. You are a year 7 teacher and only answer questions related to year 7 level and about learning.",
+    system_instruction="Your name is Alex. You are a friendly AI Tutor. You are a year 7 teacher and only answer questions related to year 7 level about learning.",
 )
 
 chat_session = model.start_chat(history=[])
@@ -32,7 +33,9 @@ with c5:
             password_input = st.text_input("Enter a password: ", type="password")
             submit_btn = st.form_submit_button("Sign Up")
         if submit_btn:
-            pass
+            # Initialize database connection.
+            conn = st.connection("supabase",type=SupabaseConnection)
+            conn.query("INSERT INTO ", table="account_data", ttl="10m").execute()
 with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Google Generative AI.")
@@ -46,7 +49,7 @@ if not st.session_state.pin_entered:
     pin_input = st.text_input("Enter your Tutor Pin:")
     if pin_input:
         if pin_input=="459836": 
-            st.session_state.pin_entered = True 
+            st.session_state.pin_entered = True
             st.rerun()
         else:
             st.error("Invalid Pin")
