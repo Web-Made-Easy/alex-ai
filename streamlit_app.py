@@ -32,63 +32,79 @@ supabase = init_supabase_connection()
 
 chat_session = model.start_chat(history=[])
 
-c1, c2, c3, c4, c5 = st.columns([6,1,1,1,3])
+c1, c2, c3, c4, c5 = st.columns([6,1,1,3,3])
 
-with c5:
-    try:
-        with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
-            with st.form("Sign Up", border=False):
-                name_input = st.text_input("Enter your name: ")
-                email_input = st.text_input("Enter your email: ")
-                password_input = st.text_input("Enter a password: ", type="password")
-                submit_btn = st.form_submit_button("Sign Up")
-            if submit_btn:
-                # Create Pin:
-                created_pin = random.randint(111111, 999999)
-                ### Database ###
-                # Check if pin exists (unlikely)
-                pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
-                if pin_found.data:
+def check_if_logged_in:
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+        st.info("Hey there, please sign up or log in to the start chatting!")
+    else:
+        st.session_state.logged_in = True
+        log_in_placeholder.empty()
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+log_in_placeholder = st.empty()
+with log_in_placeholder.container():
+    with c4:
+        try:
+            with st.popover("Log In", help=None, disabled=False, use_container_width=True):
+                with st.form("Log In", border=False):
+                    email_input = st.text_input("Enter your email: ")
+                    pin_input = st.number_input("Enter your pin: ", min_value=111111, max_value=999999, disabled=False)
+                    submit_btn = st.form_submit_button("Sign Up")
+                if submit_btn:
+                    ### Database ###
+                    # Check if pin exists
+                    pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
+                    email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                    if pin_found.data and email_found.data:
+                        st.success("Successfully logged in!")
+                        st.session_state.logged_in = True
+                        check_if_logged_in()
+        except Exception as e:
+            st.error(f"Something went wrong: {e}")
+    with c5:
+        try:
+            with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
+                with st.form("Sign Up", border=False):
+                    name_input = st.text_input("Enter your name: ")
+                    email_input = st.text_input("Enter your email: ")
+                    password_input = st.text_input("Enter a password: ", type="password")
+                    submit_btn = st.form_submit_button("Sign Up")
+                if submit_btn:
+                    # Create Pin:
                     created_pin = random.randint(111111, 999999)
-                # Check if email already exists
-                email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
-                if email_found.data:
-                    st.error("An account with this email already exists! Try again.")
-                else:
-                # Insert new account data: 
-                    query = {
-                        "name": name_input,
-                        "email": email_input,
-                        "password": password_input,
-                        "pin": created_pin
-                    }
-                    supabase.from_('account_data').insert(query).execute()
-                    st.success("Account created successfully!")
-                    st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
-    except Exception as e:
-        st.error(f"Something went wrong: {e}")
+                    ### Database ###
+                    # Check if pin exists (unlikely)
+                    pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
+                    if pin_found.data:
+                        created_pin = random.randint(111111, 999999)
+                    # Check if email already exists
+                    email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                    if email_found.data:
+                        st.error("An account with this email already exists! Try again.")
+                    else:
+                    # Insert new account data: 
+                        query = {
+                            "name": name_input,
+                            "email": email_input,
+                            "password": password_input,
+                            "pin": created_pin
+                        }
+                        supabase.from_('account_data').insert(query).execute()
+                        st.success("Account created successfully!")
+                        st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
+                        st.session_state.logged_in = True
+                        check_if_logged_in()
+        except Exception as e:
+            st.error(f"Something went wrong: {e}")
 
 with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Google Generative AI.")
 
-if "pin_entered" not in st.session_state:
-    st.session_state.pin_entered = False
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-if not st.session_state.pin_entered:
-    pin_input = st.text_input("Enter your Pin:")
-    if pin_input:
-        if pin_input == "459836": 
-            st.session_state.pin_entered = True
-            st.rerun()
-        else:
-            st.error("Invalid pin...")
-    else:
-        st.info("Enter your Tutor Pin to access your account")
-
-if st.session_state.pin_entered: 
+if st.session_state.logged_in: 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
