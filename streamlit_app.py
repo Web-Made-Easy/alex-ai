@@ -23,8 +23,8 @@ model = genai.GenerativeModel(
 )
 
 # Initialize Supabase client
-supabase_url = os.environ("SUPABASE_URL")
-supabase_key = os.environ("SUPABASE_KEY")
+supabase_url = os.environ.get("SUPABASE_URL")
+supabase_key = os.environ.get("SUPABASE_KEY")
 supabase = create_client(supabase_url, supabase_key)
 
 chat_session = model.start_chat(history=[])
