@@ -7,7 +7,7 @@ import random
 from supabase import create_client, Client
 
 # Configure the Google Generative AI model
-genai.configure(api_key=os.environ("GOOGLE_API_KEY"))
+genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
 generation_config = {
     "temperature": 1,
