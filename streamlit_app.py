@@ -34,7 +34,7 @@ chat_session = model.start_chat(history=[])
 
 c1, c2, c3, c4, c5 = st.columns([6,1,1,3,3])
 
-def check_if_logged_in:
+def check_if_logged_in():
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
         st.info("Hey there, please sign up or log in to the start chatting!")
