@@ -59,7 +59,7 @@ with c5:
                         "password": password_input,
                         "pin": created_pin
                     }
-                    supabase.from('account_data').insert(query).execute()
+                    supabase.from_('account_data').insert(query).execute()
                     st.success("Account created successfully!")
                     st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
     except Exception as e:
