@@ -32,8 +32,9 @@ supabase = init_supabase_connection()
 
 chat_session = model.start_chat(history=[])
 
-c1, c2, c3, c4, c5 = st.columns([6,1,1,3,3])
+c1, c2, c3 = st.columns([6,3,3])
 
+log_in_placeholder = st.empty()
 def check_if_logged_in():
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
@@ -46,9 +47,8 @@ def check_if_logged_in():
 
 check_if_logged_in()
 
-log_in_placeholder = st.empty()
 with log_in_placeholder.container():
-    with c4:
+    with c2:
         try:
             with st.popover("Log In", help=None, disabled=False, use_container_width=True):
                 with st.form("Log In", border=False):
@@ -66,7 +66,7 @@ with log_in_placeholder.container():
                         check_if_logged_in()
         except Exception as e:
             st.error(f"Something went wrong: {e}")
-    with c5:
+    with c3:
         try:
             with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
                 with st.form("Sign Up", border=False):
