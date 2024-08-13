@@ -32,14 +32,14 @@ chat_session = model.start_chat(history=[])
 c1, c2, c3, c4, c5 = st.columns([6,1,1,1,3])
 
 with c5:
-    with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
-        with st.form("Sign Up", border=False):
-            name_input = st.text_input("Enter your name: ")
-            email_input = st.text_input("Enter your email: ")
-            password_input = st.text_input("Enter a password: ", type="password")
-            submit_btn = st.form_submit_button("Sign Up")
-        if submit_btn:
-            try:
+    try:
+        with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
+            with st.form("Sign Up", border=False):
+                name_input = st.text_input("Enter your name: ")
+                email_input = st.text_input("Enter your email: ")
+                password_input = st.text_input("Enter a password: ", type="password")
+                submit_btn = st.form_submit_button("Sign Up")
+            if submit_btn:
                 # Pin:
                 created_pin = random.randint(111111, 999999)
                 # Database
@@ -47,23 +47,23 @@ with c5:
                 pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
                 if pin_found.data:
                     created_pin = random.randint(111111, 999999)
-                    # Check if email already exists
-                    email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
-                    if email_found.data:
-                        st.error("An account with this email already exists! Try again.")
-                    else:
-                        # Insert new account data
-                        query = {
-                            "name": name_input,
-                            "email": email_input,
-                            "password": password_input,
-                            "pin": created_pin
-                        }
-                        supabase.from('account_data').insert(query).execute()
-                        st.success("Account created successfully!")
-                        st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
-            except Exception as e:
-                st.error(f"Something went wrong: {e}")
+                # Check if email already exists
+                email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                if email_found.data:
+                    st.error("An account with this email already exists! Try again.")
+                else:
+                    # Insert new account data
+                    query = {
+                        "name": name_input,
+                        "email": email_input,
+                        "password": password_input,
+                        "pin": created_pin
+                    }
+                    supabase.from('account_data').insert(query).execute()
+                    st.success("Account created successfully!")
+                    st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
+    except Exception as e:
+        st.error(f"Something went wrong: {e}")
 
 with c1:
     st.title("Alex AI")
