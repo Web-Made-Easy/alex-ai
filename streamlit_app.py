@@ -44,6 +44,8 @@ def check_if_logged_in():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
+check_if_logged_in()
+
 log_in_placeholder = st.empty()
 with log_in_placeholder.container():
     with c4:
