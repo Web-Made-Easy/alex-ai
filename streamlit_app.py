@@ -48,7 +48,7 @@ with log_in_placeholder.container():
                 if submit_btn:
                     ### Database ###
                     # Check if pin exists
-                    pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
+                    pin_found = supabase.from_('account_data').select('pin').eq('pin', pin_input).execute()
                     email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
                     if pin_found.data and email_found.data:
                         st.success("Successfully logged in!")
