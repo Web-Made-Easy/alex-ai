@@ -6,7 +6,7 @@ import random
 from supabase import create_client, Client
 
 # Configure the Google Generative AI model
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 generation_config = {
     "temperature": 1,
@@ -22,9 +22,10 @@ model = genai.GenerativeModel(
     system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
+@st.cache_resource
 def init_supabase_connection():
-    url = st.secrets("SUPABASE_URL")
-    key = st.secrets("SUPABASE_KEY")
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
     return create_client(url, key)
 
 supabase = init_supabase_connection()
