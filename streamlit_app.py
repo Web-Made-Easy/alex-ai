@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_modal import Modal
 import google.generativeai as genai
 import time
 import os
@@ -34,7 +33,7 @@ c1, c2, c3, c4, c5 = st.columns([6,1,1,1,3])
 
 with c5:
     try:
-        with Modal("Sign Up", help=None, disabled=False, use_container_width=True):
+        with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
             with st.form("Sign Up", border=False):
                 name_input = st.text_input("Enter your name: ")
                 email_input = st.text_input("Enter your email: ")
