@@ -52,7 +52,7 @@ with log_in_placeholder.container():
                     email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
                     if pin_found.data and email_found.data:
                         st.success("Successfully logged in!")
-                        st.session_state."logged_in" = True
+                        st.session_state["logged_in"] = True
         except Exception as e:
             st.error(f"Something went wrong: {e}")
     with c3:
@@ -86,7 +86,7 @@ with log_in_placeholder.container():
                         supabase.from_('account_data').insert(query).execute()
                         st.success("Account created successfully!")
                         st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
-                        st.session_state."logged_in" = True
+                        st.session_state["logged_in"] = True
         except Exception as e:
             st.error(f"Something went wrong: {e}")
 
