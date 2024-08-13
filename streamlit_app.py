@@ -35,17 +35,6 @@ chat_session = model.start_chat(history=[])
 c1, c2, c3 = st.columns([6,3,3])
 
 log_in_placeholder = st.empty()
-def check_if_logged_in():
-    if "logged_in" not in st.session_state:
-        st.session_state["logged_in"] = False
-        st.info("Hey there, please sign up or log in to the start chatting!")
-    else:
-        st.session_state.logged_in = True
-        log_in_placeholder.empty()
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-check_if_logged_in()
 
 with log_in_placeholder.container():
     with c2:
@@ -98,7 +87,6 @@ with log_in_placeholder.container():
                         st.success("Account created successfully!")
                         st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
                         st.session_state.logged_in = True
-                        check_if_logged_in()
         except Exception as e:
             st.error(f"Something went wrong: {e}")
 
