@@ -30,6 +30,7 @@ def init_supabase_connection():
 
 supabase = init_supabase_connection()
 
+st.session_state["logged_in"] = False
 chat_session = model.start_chat(history=[])
 
 c1, c2, c3 = st.columns([6,3,3])
