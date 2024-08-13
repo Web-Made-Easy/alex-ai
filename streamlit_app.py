@@ -43,7 +43,7 @@ with log_in_placeholder.container():
             with st.popover("Log In", help=None, disabled=False, use_container_width=True):
                 with st.form("Log In", border=False):
                     email_input = st.text_input("Enter your email: ")
-                    pin_input = st.number_input("Enter your pin: ", disabled=False)
+                    pin_input = st.number_input("Enter your pin: ", disabled=False, placeholder=False)
                     submit_btn = st.form_submit_button("Log In")
                 if submit_btn:
                     ### Database ###
