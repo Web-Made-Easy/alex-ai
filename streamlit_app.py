@@ -95,7 +95,7 @@ with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Google Generative AI.")
 
-if st.session_state.logged_in: 
+if st.session_state["logged_in"]==True: 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
