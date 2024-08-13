@@ -44,26 +44,27 @@ with c5:
             if submit_btn:
                 # Pin:
                 created_pin = random.randint(111111, 999999)
-                # Database
-                # Check if pin exists (unlikely)
-                pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
-                if pin_found.data:
-                    created_pin = random.randint(111111, 999999)
-                # Check if email already exists
-                email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
-                if email_found.data:
-                    st.error("An account with this email already exists! Try again.")
-                else:
-                    # Insert new account data
-                    query = {
-                        "name": name_input,
-                        "email": email_input,
-                        "password": password_input,
-                        "pin": created_pin
-                    }
-                    supabase.from_('account_data').insert(query).execute()
-                    st.success("Account created successfully!")
-                    st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
+                
+                # # Check if pin exists (unlikely)
+                # pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
+                # if pin_found.data:
+                #     created_pin = random.randint(111111, 999999)
+                # # Check if email already exists
+                # email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                # if email_found.data:
+                #     st.error("An account with this email already exists! Try again.")
+                # else:
+                # Database #
+                # Insert new account data: 
+                query = {
+                    "name": name_input,
+                    "email": email_input,
+                    "password": password_input,
+                    "pin": created_pin
+                }
+                supabase.from_('account_data').insert(query).execute()
+                st.success("Account created successfully!")
+                st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
     except Exception as e:
         st.error(f"Something went wrong: {e}")
 
