@@ -22,10 +22,12 @@ model = genai.GenerativeModel(
     system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
-# Initialize Supabase client
-supabase_url = os.environ["SUPABASE_URL"]
-supabase_key = os.environ["SUPABASE_KEY"]
-supabase = create_client(supabase_url, supabase_key)
+def init_connection():
+    url = os.environ["SUPABASE_URL"]
+    key = os.environ["SUPABASE_KEY"]
+    return create_client(url, key)
+
+supabase = init_connection()
 
 chat_session = model.start_chat(history=[])
 
