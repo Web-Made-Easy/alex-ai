@@ -31,6 +31,8 @@ def init_supabase_connection():
 supabase = init_supabase_connection()
 
 st.session_state["logged_in"] = False
+if "messages" not in st.session_state:
+    st.session_state["messages"] = []
 chat_session = model.start_chat(history=[])
 
 c1, c2, c3 = st.columns([6,3,3])
@@ -97,12 +99,12 @@ with c1:
 
 if st.session_state["logged_in"]==True:
     log_in_placeholder.empty()
-    for message in st.session_state.messages:
+    for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
     if prompt := st.chat_input("You:  "):
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state["messages"].append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
@@ -125,4 +127,4 @@ if st.session_state["logged_in"]==True:
             except Exception as e:
                 response_placeholder.markdown("An error occurred: " + str(e))
 
-        st.session_state.messages.append({"role": "tutor", "content": full_response})
+        st.session_state["messages"].append({"role": "tutor", "content": full_response})
