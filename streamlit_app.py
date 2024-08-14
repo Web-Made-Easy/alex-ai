@@ -37,9 +37,9 @@ chat_session = model.start_chat(history=[])
 
 c1, c2, c3 = st.columns([6,3,3])
 
-log_in_placeholder = st.empty()
+log_in_placeholder = st.container()
 
-with log_in_placeholder.container():
+with log_in_placeholder:
     with c2:
         try:
             with st.popover("Log In", help=None, disabled=False, use_container_width=True):
