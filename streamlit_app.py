@@ -55,7 +55,7 @@ if st.session_state["logged_in"]:
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        with st.chat_message("Alex"):
+        with st.chat_message("tutor"):
             response_placeholder = st.empty()
             full_response = ""
 
@@ -94,7 +94,7 @@ else:
                         st.session_state["logged_in"] = True
                         userdata = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
                         username = userdata.data[0]['name'] if userdata.data else "User"
-                        log_in_placeholder.empty()
+                        log_in_placeholder = st.empty()
                         with log_in_placeholder.container():
                             with c3:
                                 with st.popover(f"{username}", help=None, disabled=False, use_container_width=True):
@@ -135,7 +135,7 @@ else:
                         st.session_state["logged_in"] = True
                         userdata = supabase.from_('account_data').select('name').eq('pin', created_pin).execute()
                         username = userdata.data[0]['name'] if userdata.data else "User"
-                        log_in_placeholder.empty()
+                        log_in_placeholder = st.empty()
                         with log_in_placeholder.container():
                             with c3:
                                 with st.popover(f"{username}", help=None, disabled=False, use_container_width=True):
