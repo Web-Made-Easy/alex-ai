@@ -29,19 +29,61 @@ def init_supabase_connection():
     return create_client(url, key)
 
 supabase = init_supabase_connection()
+log_in_placeholder = st.empty()
 
-st.session_state["logged_in"] = False
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
-chat_session = model.start_chat(history=[])
 
-c1, c2, c3 = st.columns([6,3,3])
+username = None
+if st.session_state["logged_in"]:
+    c1, c2, c3 = st.columns([6, 3, 3])
+    log_in_placeholder.empty()
+    with log_in_placeholder.container():
+        with c3:
+            with st.popover(username, help=None, disabled=False, use_container_width=True):
+                st.button("Profile")
 
-log_in_placeholder = st.container()
+    chat_session = model.start_chat(history=st.session_state["messages"])
 
-with log_in_placeholder:
-    with c2:
-        try:
+
+    with c1:
+        st.title("Alex AI")
+        st.write("Your AI Tutor. Powered by Google Generative AI.")
+    
+    for message in st.session_state["messages"]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if prompt := st.chat_input("You:  "):
+        st.session_state["messages"].append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("Alex"):
+            response_placeholder = st.empty()
+            full_response = ""
+
+            try:
+                response = chat_session.send_message(prompt)
+
+                full_response = response.text  
+
+                current_text = ""
+                for letter in full_response:
+                    current_text += letter
+                    response_placeholder.markdown(current_text)
+                    time.sleep(0.01)
+
+            except Exception as e:
+                response_placeholder.markdown("An error occurred: " + str(e))
+
+        st.session_state["messages"].append({"role": "tutor", "content": full_response})
+else:
+    c1, c2, c3 = st.columns([6, 3, 3])
+    with log_in_placeholder.container():
+        with c2:
             with st.popover("Log In", help=None, disabled=False, use_container_width=True):
                 with st.form("Log In", border=False):
                     email_input = st.text_input("Enter your email: ")
@@ -56,10 +98,12 @@ with log_in_placeholder:
                     if pin_found.data and email_found.data:
                         st.success("Successfully logged in!")
                         st.session_state["logged_in"] = True
-        except Exception as e:
-            st.error(f"Something went wrong: {e}")
-    with c3:
-        try:
+                        username = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
+                        username = username.data
+                    else:
+                        st.error("Invalid email or pin.")
+        
+        with c3:
             with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
                 with st.form("Sign Up", border=False):
                     name_input = st.text_input("Enter your name: ")
@@ -90,8 +134,6 @@ with log_in_placeholder:
                         st.success("Account created successfully!")
                         st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
                         st.session_state["logged_in"] = True
-        except Exception as e:
-            st.error(f"Something went wrong: {e}")
 
 with c1:
     st.title("Alex AI")
