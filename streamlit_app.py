@@ -38,7 +38,7 @@ if "messages" not in st.session_state:
 
 username = None
 if st.session_state["logged_in"]:
-    c1, c2, c3 = st.columns([6, 3, 3])
+    c1, c2, c3 = st.columns([7, 2, 2])
 
     chat_session = model.start_chat(history=st.session_state["messages"])
 
@@ -75,7 +75,7 @@ if st.session_state["logged_in"]:
 
         st.session_state["messages"].append({"role": "tutor", "content": full_response})
 else:
-    c1, c2, c3 = st.columns([6, 3, 3])
+    c1, c2, c3 = st.columns([7, 2, 2])
     with log_in_placeholder.container():
         with c2:
             with st.popover("Log In", help=None, disabled=False, use_container_width=True):
