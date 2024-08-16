@@ -39,14 +39,8 @@ if "messages" not in st.session_state:
 username = None
 if st.session_state["logged_in"]:
     c1, c2, c3 = st.columns([6, 3, 3])
-    log_in_placeholder.empty()
-    with log_in_placeholder.container():
-        with c3:
-            with st.popover(username, help=None, disabled=False, use_container_width=True):
-                st.button("Profile")
 
     chat_session = model.start_chat(history=st.session_state["messages"])
-
 
     with c1:
         st.title("Alex AI")
@@ -100,6 +94,11 @@ else:
                         st.session_state["logged_in"] = True
                         username = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
                         username = username.data
+                            log_in_placeholder.empty()
+                            with log_in_placeholder.container():
+                                with c3:
+                                    with st.popover(f"{username}", help=None, disabled=False, use_container_width=True):
+                                        st.button("Profile")
                     else:
                         st.error("Invalid email or pin.")
         
@@ -134,6 +133,11 @@ else:
                         st.success("Account created successfully!")
                         st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
                         st.session_state["logged_in"] = True
+                        log_in_placeholder.empty()
+                        with log_in_placeholder.container():
+                            with c3:
+                                with st.popover(f"{username}", help=None, disabled=False, use_container_width=True):
+                                    st.button("Profile")
 
 with c1:
     st.title("Alex AI")
