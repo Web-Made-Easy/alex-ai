@@ -93,7 +93,6 @@ else:
                         st.success("Successfully logged in!")
                         st.session_state["logged_in"] = True
                         username = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
-                        username = username.data
                             log_in_placeholder.empty()
                             with log_in_placeholder.container():
                                 with c3:
@@ -133,6 +132,7 @@ else:
                         st.success("Account created successfully!")
                         st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
                         st.session_state["logged_in"] = True
+                        username = supabase.from_('account_data').select('name').eq('pin', created_pin).execute()
                         log_in_placeholder.empty()
                         with log_in_placeholder.container():
                             with c3:
