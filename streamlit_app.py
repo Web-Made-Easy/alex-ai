@@ -35,44 +35,14 @@ if "logged_in" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
-if st.session_state["logged_in"]:
-    c1, c2, c3 = st.columns([7, 3, 3])
+with c1:
+    st.title("Alex AI")
+    st.write("Your AI Tutor. Powered by Gemini.")
 
-    chat_session = model.start_chat(history=st.session_state["messages"])
+c1, c2, c3 = st.columns([7, 3, 3])
+log_in_placeholder = st.empty()
 
-    with c1:
-        st.title("Alex AI")
-        st.write("Your AI Tutor. Powered by Google Generative AI.")
-
-    for message in st.session_state["messages"]:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    if prompt := st.chat_input("You:  "):
-        st.session_state["messages"].append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("tutor"):
-            response_placeholder = st.empty()
-            full_response = ""
-
-            try:
-                response = chat_session.send_message(prompt)
-                full_response = response.text  
-
-                current_text = ""
-                for letter in full_response:
-                    current_text += letter
-                    response_placeholder.markdown(current_text)
-                    time.sleep(0.01)
-
-            except Exception as e:
-                response_placeholder.markdown("An error occurred: " + str(e))
-
-        st.session_state["messages"].append({"role": "tutor", "content": full_response})
-else:
-    c1, c2, c3 = st.columns([7, 3, 3])
+with log_in_placeholder.container():
     with c2:
         with st.popover("Log In", help=None, disabled=False, use_container_width=True):
             with st.form("Login Info", border=False):
@@ -128,3 +98,39 @@ else:
                     userdata = supabase.from_('account_data').select('name').eq('pin', created_pin).execute()
                     username = userdata.data[0]['name'] if userdata.data else "User"
                     st.session_state["username"] = username
+
+
+if st.session_state["logged_in"]:
+    log_in_placeholder.empty()
+    with c3:
+        with st.popover(f'{username}', help=None, disabled=False, use_container_width=True):
+            st.button("Profile")
+    chat_session = model.start_chat(history=st.session_state["messages"])
+
+    for message in st.session_state["messages"]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if prompt := st.chat_input("You:  "):
+        st.session_state["messages"].append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("tutor"):
+            response_placeholder = st.empty()
+            full_response = ""
+
+            try:
+                response = chat_session.send_message(prompt)
+                full_response = response.text  
+
+                current_text = ""
+                for letter in full_response:
+                    current_text += letter
+                    response_placeholder.markdown(current_text)
+                    time.sleep(0.01)
+
+            except Exception as e:
+                response_placeholder.markdown("An error occurred: " + str(e))
+
+        st.session_state["messages"].append({"role": "tutor", "content": full_response})
