@@ -119,7 +119,7 @@ if st.session_state["logged_in"]:
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        with st.chat_message("model"):
+        with st.chat_message("Alex"):
             response_placeholder = st.empty()
             full_response = ""
 
@@ -136,4 +136,4 @@ if st.session_state["logged_in"]:
             except Exception as e:
                 response_placeholder.markdown("An error occurred: " + str(e))
 
-        st.session_state["messages"].append({"role": "tutor", "content": full_response})
+        st.session_state["messages"].append({"role": "model", "parts": full_response})
