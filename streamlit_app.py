@@ -106,7 +106,7 @@ with log_in_placeholder.container():
 if st.session_state["logged_in"]:
     log_in_placeholder.empty()
     with c3:
-        with st.popover(f'{username}', help=None, disabled=False, use_container_width=True):
+        with st.popover(f'{st.session_state["username"]}', help=None, disabled=False, use_container_width=True):
             st.button("Profile")
     chat_session = model.start_chat(history=st.session_state["messages"])
 
