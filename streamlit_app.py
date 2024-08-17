@@ -75,7 +75,7 @@ else:
     c1, c2, c3 = st.columns([7, 3, 3])
     with c2:
         with st.popover("Log In", help=None, disabled=False, use_container_width=True):
-            with st.form("Log In", border=False):
+            with st.form("Login Info", border=False):
                 email_input = st.text_input("Enter your email: ")
                 pin_input = st.text_input("Enter your pin: ", placeholder="eg. 123456")
                 submit_btn = st.form_submit_button("Log In")
@@ -96,7 +96,7 @@ else:
     
     with c3:
         with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
-            with st.form("Sign Up", border=False):
+            with st.form("Signup info", border=False):
                 name_input = st.text_input("Enter your name: ")
                 email_input = st.text_input("Enter your email: ")
                 password_input = st.text_input("Enter a password: ", type="password")
