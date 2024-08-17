@@ -22,6 +22,8 @@ model = genai.GenerativeModel(
     system_instruction="Your name is Alex. You are a friendly AI Tutor.",
 )
 
+username = "Guest"
+
 @st.cache_resource
 def init_supabase_connection():
     url = st.secrets["SUPABASE_URL"]
