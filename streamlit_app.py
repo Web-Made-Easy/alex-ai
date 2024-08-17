@@ -35,11 +35,12 @@ if "logged_in" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
+c1, c2, c3 = st.columns([7, 3, 3])
+
 with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Gemini.")
 
-c1, c2, c3 = st.columns([7, 3, 3])
 log_in_placeholder = st.empty()
 
 with log_in_placeholder.container():
