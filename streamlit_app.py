@@ -112,14 +112,14 @@ if st.session_state["logged_in"]:
 
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            st.markdown(message["parts"])
 
     if prompt := st.chat_input("You:  "):
-        st.session_state["messages"].append({"role": "user", "content": prompt})
+        st.session_state["messages"].append({"role": "user", "parts": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        with st.chat_message("tutor"):
+        with st.chat_message("model"):
             response_placeholder = st.empty()
             full_response = ""
 
