@@ -45,7 +45,7 @@ with c1:
 
 log_in_placeholder = st.empty()
 
-with log_in_placeholder.container():
+with log_in_placeholder:
     with c2:
         with st.popover("Log In", help=None, disabled=False, use_container_width=True):
             with st.form("Login Info", border=False):
