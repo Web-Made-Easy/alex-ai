@@ -16,14 +16,6 @@ generation_config = {
     "response_mime_type": "text/plain",
 }
 
-model = genai.GenerativeModel(
-    model_name="gemini-1.5-pro",
-    generation_config=generation_config,
-    system_instruction="Your name is Alex. You are a friendly AI Tutor.",
-)
-
-username = "Guest"
-
 @st.cache_resource
 def init_supabase_connection():
     url = st.secrets["SUPABASE_URL"]
@@ -36,6 +28,8 @@ if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
+if "username" not in st.session_state:
+    st.session_state["username"] = "Guest"
 
 c1, c2, c3 = st.columns([7, 3, 3])
 
@@ -43,9 +37,7 @@ with c1:
     st.title("Alex AI")
     st.write("Your AI Tutor. Powered by Gemini.")
 
-log_in_placeholder = st.empty()
-
-with log_in_placeholder:
+if st.session_state["logged_in"] == False:
     with c2:
         with st.popover("Log In", help=None, disabled=False, use_container_width=True):
             with st.form("Login Info", border=False):
@@ -104,10 +96,14 @@ with log_in_placeholder:
 
 
 if st.session_state["logged_in"]:
-    log_in_placeholder.empty()
     with c3:
         with st.popover(f'{st.session_state["username"]}', help=None, disabled=False, use_container_width=True):
             st.button("Profile")
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-pro",
+        generation_config=generation_config,
+        system_instruction=f'Your name is Alex. You are a friendly AI Tutor. You are talking to {st.session_state["username"]}',
+    )
     chat_session = model.start_chat(history=st.session_state["messages"])
 
     for message in st.session_state["messages"]:
