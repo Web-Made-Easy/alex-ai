@@ -39,62 +39,63 @@ with c1:
 
 log_in_placeholder = st.empty()
 if st.session_state["logged_in"] == False:
-    with log_in_placeholder.container():
-        with c2:
-            with st.popover("Log In", help=None, disabled=False, use_container_width=True):
-                with st.form("Login Info", border=False):
-                    email_input = st.text_input("Enter your email: ")
-                    pin_input = st.text_input("Enter your pin: ", placeholder="eg. 123456")
-                    submit_btn = st.form_submit_button("Log In")
-                if submit_btn:
-                    pin_input = int(pin_input)
-                    ### Database ###
-                    # Check if pin and email exist
-                    pin_found = supabase.from_('account_data').select('pin').eq('pin', pin_input).execute()
-                    email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
-                    if pin_found.data and email_found.data:
-                        st.success("Successfully logged in!")
-                        st.session_state["logged_in"] = True
-                        userdata = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
-                        username = userdata.data[0]['name'] if userdata.data else "User"
-                        st.session_state["username"] = username
-                    else:
-                        st.error("Invalid email or pin.")
-        
-        with c3:
-            with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
-                with st.form("Signup info", border=False):
-                    name_input = st.text_input("Enter your name: ")
-                    email_input = st.text_input("Enter your email: ")
-                    password_input = st.text_input("Enter a password: ", type="password")
-                    submit_btn = st.form_submit_button("Sign Up")
-                if submit_btn:
-                    # Create Pin
+    with c2:
+        with st.popover("Log In", help=None, disabled=False, use_container_width=True):
+            with st.form("Login Info", border=False):
+                email_input = st.text_input("Enter your email: ")
+                pin_input = st.text_input("Enter your pin: ", placeholder="eg. 123456")
+                submit_btn = st.form_submit_button("Log In")
+            if submit_btn:
+                pin_input = int(pin_input)
+                ### Database ###
+                # Check if pin and email exist
+                pin_found = supabase.from_('account_data').select('pin').eq('pin', pin_input).execute()
+                email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                if pin_found.data and email_found.data:
+                    st.success("Successfully logged in!")
+                    st.session_state["logged_in"] = True
+                    userdata = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
+                    username = userdata.data[0]['name'] if userdata.data else "User"
+                    st.session_state["username"] = username
+                    st.rerun()
+                else:
+                    st.error("Invalid email or pin.")
+    
+    with c3:
+        with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
+            with st.form("Signup info", border=False):
+                name_input = st.text_input("Enter your name: ")
+                email_input = st.text_input("Enter your email: ")
+                password_input = st.text_input("Enter a password: ", type="password")
+                submit_btn = st.form_submit_button("Sign Up")
+            if submit_btn:
+                # Create Pin
+                created_pin = random.randint(111111, 999999)
+                ### Database ###
+                # Check if pin exists
+                pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
+                if pin_found.data:
                     created_pin = random.randint(111111, 999999)
-                    ### Database ###
-                    # Check if pin exists
-                    pin_found = supabase.from_('account_data').select('pin').eq('pin', created_pin).execute()
-                    if pin_found.data:
-                        created_pin = random.randint(111111, 999999)
-                    # Check if email already exists
-                    email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
-                    if email_found.data:
-                        st.error("An account with this email already exists! Try again.")
-                    else:
-                        # Insert new account data
-                        query = {
-                            "name": name_input,
-                            "email": email_input,
-                            "password": password_input,
-                            "pin": created_pin
-                        }
-                        supabase.from_('account_data').insert(query).execute()
-                        st.success("Account created successfully!")
-                        st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
-                        st.session_state["logged_in"] = True
-                        userdata = supabase.from_('account_data').select('name').eq('pin', created_pin).execute()
-                        username = userdata.data[0]['name'] if userdata.data else "User"
-                        st.session_state["username"] = username
+                # Check if email already exists
+                email_found = supabase.from_('account_data').select('email').eq('email', email_input).execute()
+                if email_found.data:
+                    st.error("An account with this email already exists! Try again.")
+                else:
+                    # Insert new account data
+                    query = {
+                        "name": name_input,
+                        "email": email_input,
+                        "password": password_input,
+                        "pin": created_pin
+                    }
+                    supabase.from_('account_data').insert(query).execute()
+                    st.success("Account created successfully!")
+                    st.info(f"Your pin is **{created_pin}**. Keep this safe as you will need it to sign in.")
+                    st.session_state["logged_in"] = True
+                    userdata = supabase.from_('account_data').select('name').eq('pin', created_pin).execute()
+                    username = userdata.data[0]['name'] if userdata.data else "User"
+                    st.session_state["username"] = username
+                    st.rerun()
 else:
     log_in_placeholder.empty()
     with c3:
