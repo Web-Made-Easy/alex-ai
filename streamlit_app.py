@@ -40,7 +40,7 @@ with c1:
 log_in_placeholder = st.empty()
 if st.session_state["logged_in"] == False:
     with c2:
-        with log_in_placeholder:
+        with log_in_placeholder.container():
             with st.popover("Log In", help=None, disabled=False, use_container_width=True):
                 with st.form("Login Info", border=False):
                     email_input = st.text_input("Enter your email: ")
@@ -62,7 +62,7 @@ if st.session_state["logged_in"] == False:
                         st.error("Invalid email or pin.")
     
     with c3:
-        with log_in_placeholder:
+        with log_in_placeholder.container():
             with st.popover("Sign Up", help=None, disabled=False, use_container_width=True):
                 with st.form("Signup info", border=False):
                     name_input = st.text_input("Enter your name: ")
