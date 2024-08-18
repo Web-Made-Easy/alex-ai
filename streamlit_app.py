@@ -56,7 +56,7 @@ if st.session_state["logged_in"] == False:
                     st.session_state["logged_in"] = True
                     userdata = supabase.from_('account_data').select('name').eq('pin', pin_input).execute()
                     username = userdata.data[0]['name'] if userdata.data else "User"
-                    st.session_state["username"] = username
+                    st.session_state["username"] = username.split()[0]
                     st.rerun()
                 else:
                     st.error("Invalid email or pin.")
@@ -94,7 +94,7 @@ if st.session_state["logged_in"] == False:
                     st.session_state["logged_in"] = True
                     userdata = supabase.from_('account_data').select('name').eq('pin', created_pin).execute()
                     username = userdata.data[0]['name'] if userdata.data else "User"
-                    st.session_state["username"] = username
+                    st.session_state["username"] = username.split()[0]
                     st.rerun()
 else:
     log_in_placeholder.empty()
